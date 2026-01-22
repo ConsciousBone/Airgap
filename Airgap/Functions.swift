@@ -6,3 +6,12 @@
 //
 
 import Foundation
+import FoundationModels
+
+// MARK: - Models availability stuffs
+enum ModelsUnavailableReason {
+    case deviceNotEligible
+    case appleIntelligenceNotEnabled
+    case modelNotReady
+    case unknown(reason: SystemLanguageModel.Availability.UnavailableReason)
+}

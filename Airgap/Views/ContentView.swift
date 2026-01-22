@@ -6,16 +6,24 @@
 //
 
 import SwiftUI
+import FoundationModels
 
 struct ContentView: View {
+    private var model = SystemLanguageModel.default
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        switch model.availability {
+        case .available:
+            Text("available!")
+        case .unavailable(.deviceNotEligible):
+            ModelsUnavailableView(reason: .deviceNotEligible)
+        case .unavailable(.appleIntelligenceNotEnabled):
+            ModelsUnavailableView(reason: .appleIntelligenceNotEnabled)
+        case .unavailable(.modelNotReady):
+            ModelsUnavailableView(reason: .modelNotReady)
+        case .unavailable(let other):
+            ModelsUnavailableView(reason: .unknown(reason: other))
         }
-        .padding()
     }
 }
 
