@@ -14,7 +14,7 @@ struct ContentView: View {
     var body: some View {
         switch model.availability {
         case .available:
-            Text("available!")
+            AvailableView()
         case .unavailable(.deviceNotEligible):
             ModelsUnavailableView(reason: .deviceNotEligible)
         case .unavailable(.appleIntelligenceNotEnabled):
