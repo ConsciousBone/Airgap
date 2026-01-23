@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import FoundationModels
 
 struct HomeView: View {
     @State private var userInput = ""
@@ -17,8 +18,21 @@ struct HomeView: View {
                 TextField("test", text: $userInput)
                 Button {
                     Task {
-                        let response = await sendModelsPrompt(prompt: userInput)
-                        await MainActor.run { modelResponse = response }
+                        let instructions = Instructions{"""
+                            You are a helpful, friendly AI assistant.
+                            """}
+                        let session = LanguageModelSession(instructions: instructions)
+
+                        modelResponse = ""
+
+                        do {
+                            let stream = session.streamResponse(to: userInput)
+                            for try await partial in stream {
+                                modelResponse = partial.content
+                            }
+                        } catch {
+                            modelResponse = "an error occured: (\(error.localizedDescription))"
+                        }
                     }
                 } label: {
                     Label("send prompt", systemImage: "paperplane")
